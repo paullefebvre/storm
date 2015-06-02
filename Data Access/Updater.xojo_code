@@ -2,7 +2,7 @@
 Protected Class Updater
 Inherits Storm.DBUpdater
 	#tag Event
-		Sub Update(dbConn As DBConnection, dbVersion As Integer)
+		Sub Update(dbConn As Storm.DBConnection, dbVersion As Integer)
 		  Select Case dbVersion
 		  Case Is < 1
 		    ProcessUpdate(BaseballSQL, 1) // Set up initial DB schema

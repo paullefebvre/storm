@@ -90,7 +90,7 @@ Protected Class DBUpdater
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
-		Event Update(dbConn As DBConnection, dbVersion As Integer)
+		Event Update(dbConn As Storm.DBConnection, dbVersion As Integer)
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
