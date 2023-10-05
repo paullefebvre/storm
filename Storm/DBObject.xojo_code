@@ -6,34 +6,34 @@ Protected Class DBObject
 		  // Also need to determine the correct table name and key.  For example, if the transactions table has a
 		  // key of TransactionID accounts.Child(transactions) should not strip off the "s"
 		  
-		  Dim childName As String
+		  Var childName As String
 		  If name.Right(2) = "es" Then
-		    childName = name.Left(name.Len-2)
+		    childName = name.Left(name.Length - 2)
 		  ElseIf name.Right(1) = "s" Then
-		    childName = name.Left(name.Len-1)
+		    childName = name.Left(name.Length - 1)
 		  Else
 		    childName = name
 		  End If
 		  
-		  Dim child As DBObject
+		  Var child As DBObject
 		  child = Factory.CreateNewInstance(childName, -1, mDatabaseConnection)
 		  
-		  Dim fk As String
+		  Var fk As String
 		  fk = Self.TableName + kPrimaryKey
 		  If child.HasColumn(fk) Then
-		    Dim query As String
+		    Var query As String
 		    query = "SELECT ID FROM " + childName + " WHERE " + fk + " = " + Self.GetColumn(kPrimaryKey).StringValue
 		    
-		    Dim results As RecordSet
+		    Var results As RecordSet
 		    results = mDatabaseConnection.SQLSelect(query)
 		    
-		    Dim all() As DBObject
-		    Dim one As DBObject
+		    Var all() As DBObject
+		    Var one As DBObject
 		    
 		    If results <> Nil Then
 		      While Not results.EOF
 		        one = Factory.CreateNewInstance(childName, results.IdxField(1).Int64Value, mDatabaseConnection)
-		        all.Append(one)
+		        all.Add(one)
 		        results.MoveNext
 		      Wend
 		    End If
@@ -48,10 +48,10 @@ Protected Class DBObject
 
 	#tag Method, Flags = &h0
 		Function ColumnNames() As String()
-		  Dim cols() As String
+		  Var cols() As String
 		  
 		  For Each key As Variant In mColumn.Keys
-		    cols.Append(key.StringValue)
+		    cols.Add(key.StringValue)
 		  Next
 		  
 		  Return cols
@@ -67,7 +67,7 @@ Protected Class DBObject
 		    // Fill dictionary with names of columns on the table so that we won't throw
 		    // exceptions if they are accessed before they have a value
 		    If dbConn <> Nil And dbConn.Database <> Nil Then
-		      Dim cols As RecordSet
+		      Var cols As RecordSet
 		      cols = dbConn.Database.FieldSchema(TableName)
 		      
 		      If cols <> Nil Then
@@ -90,15 +90,15 @@ Protected Class DBObject
 		Sub Constructor(ID As Int64, dbConn As DBConnection = Nil)
 		  If Initialize(dbConn) Then
 		    
-		    Dim query As String = "SELECT * FROM " + TableName + " WHERE " + PrimaryKey + " = ?"
+		    Var query As String = "SELECT * FROM " + TableName + " WHERE " + PrimaryKey + " = ?"
 		    
-		    Dim sqlStatement As PreparedSQLStatement
+		    Var sqlStatement As PreparedSQLStatement
 		    sqlStatement = mDatabaseConnection.Prepare(query)
 		    
 		    sqlStatement.BindType(0, SQLitePreparedStatement.SQLITE_INT64)
 		    sqlStatement.Bind(0, ID)
 		    
-		    Dim row As RecordSet
+		    Var row As RecordSet
 		    row = sqlStatement.SQLSelect()
 		    
 		    If row <> Nil Then
@@ -137,9 +137,9 @@ Protected Class DBObject
 		Sub Constructor(ID As String, dbConn As DBConnection = Nil)
 		  If Initialize(dbConn) Then
 		    
-		    Dim query As String = "SELECT * FROM " + TableName + " WHERE " + PrimaryKey + " = " + ID.Quote
+		    Var query As String = "SELECT * FROM " + TableName + " WHERE " + PrimaryKey + " = " + ID.Quote
 		    
-		    Dim row As RecordSet
+		    Var row As RecordSet
 		    row = mDatabaseConnection.SQLSelect(query)
 		    
 		    If row <> Nil Then
@@ -176,9 +176,9 @@ Protected Class DBObject
 		Sub Constructor(column As String, value As Variant, dbConn As DBConnection = Nil)
 		  If Initialize(dbConn) Then
 		    
-		    Dim query As String = "SELECT * FROM " + TableName + " WHERE " + column + " = " + SqlValue(value)
+		    Var query As String = "SELECT * FROM " + TableName + " WHERE " + column + " = " + SqlValue(value)
 		    
-		    Dim row As RecordSet
+		    Var row As RecordSet
 		    row = mDatabaseConnection.SQLSelect(query)
 		    
 		    If row <> Nil Then
@@ -209,20 +209,20 @@ Protected Class DBObject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Create(table As String, ID As Int64, dbConn As DBConnection = Nil) As DBObject
+		Shared Function Create(table As String, ID As Int64, dbConn As DBConnection = Nil) As DBObject
 		  If sCache Is Nil Then
 		    sCache = New Dictionary
 		  End If
 		  
 		  // If the ID is already in the cache, then return that instance rather than creating a new instance
-		  Dim cacheKey As String
+		  Var cacheKey As String
 		  cacheKey = table + Str(ID)
 		  
 		  If sCache.HasKey(cacheKey) Then
 		    Return sCache.Value(cacheKey)
 		  Else
 		    // Load an instance and add it to the cache
-		    Dim dbo As DBObject
+		    Var dbo As DBObject
 		    dbo = Factory.CreateNewInstance(table, ID, dbConn)
 		    
 		    sCache.Value(cacheKey) = dbo
@@ -236,7 +236,7 @@ Protected Class DBObject
 
 	#tag Method, Flags = &h0
 		Function Delete() As Boolean
-		  Dim deleted As Boolean
+		  Var deleted As Boolean
 		  deleted = DBObject.Delete(TableName, PrimaryKey, GetColumn(PrimaryKey).IntegerValue)
 		  
 		  If deleted Then
@@ -251,19 +251,19 @@ Protected Class DBObject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Delete(table As String, primaryKey As String, id As Integer, dbConn As DBConnection = Nil) As Boolean
+		Shared Function Delete(table As String, primaryKey As String, id As Integer, dbConn As DBConnection = Nil) As Boolean
 		  If dbConn = Nil Then
 		    dbConn = DBConnection.Default
 		  End If
 		  
 		  If id > 0 Then
-		    Dim command AS String = "DELETE FROM " + table + " WHERE " + primaryKey + " = " + Str(id)
+		    Var command AS String = "DELETE FROM " + table + " WHERE " + primaryKey + " = " + Str(id)
 		    
 		    If dbConn.SQLExecute(command) Then
 		      Return True
 		    Else
-		      break
-		      MsgBox "Error deleting from '" + table + "' table: " + dbConn.LastErrorMessage + EndOfLine + "Command:" + EndOfLine + command
+		      Break
+		      MessageBox("Error deleting from '" + table + "' table: " + dbConn.LastErrorMessage + EndOfLine + "Command:" + EndOfLine + command)
 		      
 		      Return False
 		    End If
@@ -277,15 +277,15 @@ Protected Class DBObject
 		  // with its values
 		  If xml = Nil Then Return
 		  
-		  Dim rowCount As Integer
+		  Var rowCount As Integer
 		  rowCount = xml.ChildCount
 		  
-		  Dim timestamp As String
-		  Dim dbTimestamp As String
-		  Dim primaryKeyValue As Int64
-		  Dim serverIDValue As String
+		  Var timestamp As String
+		  Var dbTimestamp As String
+		  Var primaryKeyValue As Int64
+		  Var serverIDValue As String
 		  
-		  Dim tsNode As XmlNode
+		  Var tsNode As XmlNode
 		  For i As Integer = 0 To rowCount-1
 		    // Find the timestamp column
 		    For j As Integer = 0 To xml.Child(i).ChildCount-1
@@ -305,7 +305,7 @@ Protected Class DBObject
 		    Next
 		    
 		    // Need to get instance for the actual type
-		    Dim dbo As DBObject
+		    Var dbo As DBObject
 		    dbo = Factory.CreateNewInstance(TableName, primaryKeyValue, mDatabaseConnection)
 		    
 		    // If XML timestamp is after the DB timestamp we have for this row (or this is a new row) then
@@ -318,11 +318,11 @@ Protected Class DBObject
 		    If timestamp > dbTimestamp Then
 		      // Process each column in XML and set its value in the class
 		      
-		      Dim dbValue As String
-		      Dim colValue As String
-		      Dim colName As String
-		      Dim colNode As XmlNode
-		      Dim pkValue As String
+		      Var dbValue As String
+		      Var colValue As String
+		      Var colName As String
+		      Var colNode As XmlNode
+		      Var pkValue As String
 		      
 		      For j As Integer = 0 To xml.Child(i).ChildCount-1
 		        colName = xml.Child(i).Child(j).Name
@@ -377,12 +377,12 @@ Protected Class DBObject
 
 	#tag Method, Flags = &h0
 		Function Duplicate() As DBObject
-		  Dim newObj As DBObject
+		  Var newObj As DBObject
 		  newObj = Factory.CreateNewInstance(TableName, -1, mDatabaseConnection)
 		  
 		  // Assign all values of the current object to the new object except for the primary key
 		  
-		  Dim cols() As String
+		  Var cols() As String
 		  cols = ColumnNames
 		  
 		  For Each c As String In cols
@@ -399,7 +399,7 @@ Protected Class DBObject
 		Function GetAll(where As String = "", sort As String = "") As DBObject()
 		  // Return array of all rows for this table
 		  
-		  Dim query As String
+		  Var query As String
 		  query = "SELECT " + PrimaryKey + " FROM " + TableName
 		  If where <> "" Then
 		    query = query + " WHERE " + where
@@ -409,16 +409,16 @@ Protected Class DBObject
 		    query = query + " ORDER BY " + sort
 		  End If
 		  
-		  Dim results As RecordSet
+		  Var results As RecordSet
 		  results = mDatabaseConnection.SQLSelect(query)
 		  
-		  Dim all() As DBObject
-		  Dim one As DBObject
+		  Var all() As DBObject
+		  Var one As DBObject
 		  
 		  If results <> Nil Then
 		    While Not results.EOF
 		      one = Factory.CreateNewInstance(TableName, results.IdxField(1).Int64Value, mDatabaseConnection)
-		      all.Append(one)
+		      all.Add(one)
 		      results.MoveNext
 		    Wend
 		  Else
@@ -434,13 +434,13 @@ Protected Class DBObject
 		  If mColumn.HasKey(columnName) Then
 		    Return mColumn.Value(columnName)
 		  Else
-		    Dim fkName As String = columnName + kPrimaryKey // For example, TeamID
+		    Var fkName As String = columnName + kPrimaryKey // For example, TeamID
 		    If mColumn.HasKey(fkName) Then
 		      // We have a foreign key, so let's see if we can get an instance to the actual data
-		      Dim ID As Int64
+		      Var ID As Int64
 		      ID = mColumn.Value(fkName).Int64Value
 		      
-		      Dim fkDBObject As DBObject
+		      Var fkDBObject As DBObject
 		      fkDBObject = Factory.CreateNewInstance(columnName, ID, mDatabaseConnection) // Try to instantiate Team using TeamID as the key
 		      
 		      Return fkDBObject
@@ -469,11 +469,6 @@ Protected Class DBObject
 
 	#tag Method, Flags = &h1
 		Protected Function Initialize(ByRef dbConn As DBConnection) As Boolean
-		  If Not DebugBuild Then
-		    ShowDemoMessage
-		    Return False
-		  End If
-		  
 		  If sCache Is Nil Then
 		    sCache = New Dictionary
 		  End If
@@ -529,13 +524,13 @@ Protected Class DBObject
 		Function Parent(columnName As String) As DBObject
 		  // Get the parent for this item
 		  
-		  Dim fkName As String = columnName + kPrimaryKey
+		  Var fkName As String = columnName + kPrimaryKey
 		  If mColumn.HasKey(fkName) Then
 		    // We have a foreign key, so let's see if we can get an instance to the actual data
-		    Dim ID As Int64
+		    Var ID As Int64
 		    ID = mColumn.Value(fkName).Int64Value
 		    
-		    Dim fkDBObject As DBObject
+		    Var fkDBObject As DBObject
 		    fkDBObject = Factory.CreateNewInstance(columnName, ID, mDatabaseConnection)
 		    
 		    Return fkDBObject
@@ -547,7 +542,7 @@ Protected Class DBObject
 
 	#tag Method, Flags = &h1
 		Protected Sub PopulateDictionary(row As RecordSet)
-		  'Dim colRS As RecordSet
+		  'Var colRS As RecordSet
 		  'colRS = mDatabaseConnection.Database.FieldSchema(TableName)
 		  '
 		  'If colRS <> Nil Then
@@ -574,8 +569,8 @@ Protected Class DBObject
 		  
 		  If Not mIsDirty Then Return True
 		  
-		  Dim command As String
-		  Dim comma As String
+		  Var command As String
+		  Var comma As String
 		  
 		  If mIsNew Then
 		    // Insert data
@@ -608,7 +603,6 @@ Protected Class DBObject
 		  Else
 		    command = "UPDATE " + TableName + " SET "
 		    
-		    Dim now As Date
 		    For Each colName As Variant In mColumn.Keys
 		      If colName <> PrimaryKey And colName <> "serverID" Then
 		        If colName = TimeStamp Then
@@ -625,7 +619,7 @@ Protected Class DBObject
 		    
 		  End If
 		  
-		  command = ReplaceAll(command, "0.0e+", "0") // Windows hack, apparently it's converting 0 to be 0.0e+ which is messing up the SQL
+		  command = command.ReplaceAll("0.0e+", "0") // Windows hack, apparently it's converting 0 to be 0.0e+ which is messing up the SQL
 		  If mDatabaseConnection.SQLExecute(command) Then
 		    mIsDirty = False
 		    
@@ -640,8 +634,8 @@ Protected Class DBObject
 		    
 		    Return True
 		  Else
-		    break
-		    MsgBox "Error saving data to '" + TableName + "' table: " + mDatabaseConnection.LastErrorMessage + EndOfLine + "Command:" + EndOfLine + command
+		    Break
+		    MessageBox("Error saving data to '" + TableName + "' table: " + mDatabaseConnection.LastErrorMessage + EndOfLine + "Command:" + EndOfLine + command)
 		    
 		    Return False
 		  End If
@@ -649,18 +643,18 @@ Protected Class DBObject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Serialize(objects() As DBObject, parentNode As XmlNode = Nil, xml As XmlDocument = Nil) As XmlNode
+		Shared Function Serialize(objects() As DBObject, parentNode As XmlNode = Nil, xml As XmlDocument = Nil) As XmlNode
 		  // Serialize a set of data by calling
 		  // Serialize for each object and then combine all the nodes into one large node
 		  
-		  Dim setNode As XmlNode
+		  Var setNode As XmlNode
 		  
-		  If objects.Ubound >= 0 Then
+		  If objects.LastIndex >= 0 Then
 		    If xml = Nil Then
 		      xml = New XmlDocument
 		    End If
 		    
-		    Dim setElement As XmlElement
+		    Var setElement As XmlElement
 		    setElement = xml.CreateElement(objects(0).TableName + "s")
 		    
 		    If parentNode = Nil Then
@@ -669,8 +663,8 @@ Protected Class DBObject
 		      setNode = parentNode.AppendChild(setElement)
 		    End If
 		    
-		    Dim objectNode As XmlNode
-		    Dim childNode As XmlNode
+		    Var objectNode As XmlNode
+		    Var childNode As XmlNode
 		    
 		    Try
 		      For Each o As Storm.DBObject In objects
@@ -678,7 +672,7 @@ Protected Class DBObject
 		        childNode = setNode.AppendChild(objectNode)
 		      Next
 		    Catch e As XmlException
-		      MsgBox(e.Message)
+		      MessageBox(e.Message)
 		    End Try
 		  End If
 		  
@@ -697,14 +691,14 @@ Protected Class DBObject
 		  //    <colX>value</colX>
 		  // </table>
 		  
-		  Dim row As XmlNode
+		  Var row As XmlNode
 		  
 		  Try
 		    If xml = Nil Then
 		      xml = New XmlDocument
 		    End If
 		    
-		    Dim rowElement As XmlElement
+		    Var rowElement As XmlElement
 		    
 		    // Create the XML row for this data
 		    rowElement = xml.CreateElement(SingularizeName)
@@ -715,8 +709,8 @@ Protected Class DBObject
 		      row = parentNode.AppendChild(rowElement)
 		    End If
 		    
-		    Dim columnElement As XmlElement
-		    Dim column As XmlNode
+		    Var columnElement As XmlElement
+		    Var column As XmlNode
 		    
 		    // Add Primary Key as first column
 		    'columnElement = xml.CreateElement(PrimaryKey)
@@ -724,7 +718,7 @@ Protected Class DBObject
 		    'column.AppendChild(xml.CreateTextNode(Self.GetColumn(PrimaryKey)))
 		    
 		    // Create an XML column for for each column in the data (skip the primary key)
-		    Dim xmlValue As String
+		    Var xmlValue As String
 		    For Each c As String In Self.ColumnNames
 		      If c <> Self.PrimaryKey Then
 		        columnElement = xml.CreateElement(c)
@@ -754,7 +748,7 @@ Protected Class DBObject
 		    Next
 		    
 		  Catch e As XmlException
-		    MsgBox(e.Message)
+		    MessageBox(e.Message)
 		  End Try
 		  
 		  Return row
@@ -778,7 +772,7 @@ Protected Class DBObject
 
 	#tag Method, Flags = &h1
 		Protected Sub SetColumnTypes()
-		  Dim cols As RecordSet
+		  Var cols As RecordSet
 		  cols = mDatabaseConnection.Database.FieldSchema(TableName)
 		  
 		  If cols <> Nil Then
@@ -792,16 +786,16 @@ Protected Class DBObject
 
 	#tag Method, Flags = &h21
 		Private Function SingularizeName() As String
-		  Dim singularTableName As String
+		  Var singularTableName As String
 		  
 		  If TableName.Right(3) = "ies" Then
-		    singularTableName = TableName.Left(TableName.Len-3) + "y"
+		    singularTableName = TableName.Left(TableName.Length - 3) + "y"
 		  ElseIf TableName.Right(3) = "ees" Then
-		    singularTableName = TableName.Left(TableName.Len-1)
+		    singularTableName = TableName.Left(TableName.Length - 1)
 		  ElseIf TableName.Right(2) = "es" Then
-		    singularTableName = TableName.Left(TableName.Len-2)
+		    singularTableName = TableName.Left(TableName.Length - 2)
 		  ElseIf TableName.Right(1) = "s" Then
-		    singularTableName = TableName.Left(TableName.Len-1)
+		    singularTableName = TableName.Left(TableName.Length - 1)
 		  Else
 		    singularTableName = TableName
 		  End If
@@ -815,7 +809,7 @@ Protected Class DBObject
 		Private Function SqlValue(value As Variant) As String
 		  // Return the value as a string to add to an SQL statement
 		  
-		  Dim sqlString As String
+		  Var sqlString As String
 		  
 		  Select Case VarType(value)
 		  Case 0
@@ -825,7 +819,7 @@ Protected Class DBObject
 		  Case 5, 6 // Double
 		    sqlString = Str(value.CurrencyValue)
 		  Case 8 // String
-		    sqlString = ReplaceAll(value.StringValue, "'", "''").Quote
+		    sqlString = value.StringValue.ReplaceAll("'", "''").Quote
 		  Case 11 // Boolean
 		    'sqlString = "'" + value + "'"
 		    If value.BooleanValue Then
@@ -844,7 +838,7 @@ Protected Class DBObject
 		  // Use Introspection to get the table name.
 		  
 		  If mTableName = "" Then
-		    Dim t As Introspection.TypeInfo = Introspection.GetType(Self)
+		    Var t As Introspection.TypeInfo = Introspection.GetType(Self)
 		    
 		    mTableName = t.Name
 		  End If
@@ -932,12 +926,12 @@ Protected Class DBObject
 			  // for this object (instead of just defaulting to "ID")
 			  
 			  If mPrimaryKey = "" Then
-			    Dim attribs() As Introspection.AttributeInfo
+			    Var attribs() As Introspection.AttributeInfo
 			    attribs = Introspection.GetType(Self).GetAttributes
 			    
 			    For Each attrib As Introspection.AttributeInfo In attribs
 			      If attrib.Name = "PrimaryKey" Then
-			        Dim key As String = attrib.Value.StringValue
+			        Var key As String = attrib.Value.StringValue
 			        
 			        mPrimaryKey = key
 			        Return key
@@ -967,7 +961,7 @@ Protected Class DBObject
 			  // for this object when saving
 			  
 			  If mTimeStamp = "" Then
-			    Dim attribs() As Introspection.AttributeInfo
+			    Var attribs() As Introspection.AttributeInfo
 			    attribs = Introspection.GetType(Self).GetAttributes
 			    
 			    For Each attrib As Introspection.AttributeInfo In attribs
@@ -1001,7 +995,9 @@ Protected Class DBObject
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="DatabaseName"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
@@ -1011,12 +1007,15 @@ Protected Class DBObject
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="IsNew"
+			Visible=false
 			Group="Behavior"
 			InitialValue="0"
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -1024,16 +1023,21 @@ Protected Class DBObject
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="PrimaryKey"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
@@ -1041,7 +1045,9 @@ Protected Class DBObject
 			Name="Super"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
@@ -1049,12 +1055,15 @@ Protected Class DBObject
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="UsePrimaryKeyValue"
 			Visible=true
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

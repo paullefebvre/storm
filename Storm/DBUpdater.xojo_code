@@ -3,9 +3,9 @@ Protected Class DBUpdater
 	#tag Method, Flags = &h21
 		Private Function GetPragmaDBVersion() As Integer
 		  If UsePragmaUserVersion Then
-		    Dim version As Integer
+		    Var version As Integer
 		    
-		    Dim result As RecordSet
+		    Var result As RecordSet
 		    result = mDBConn.Database.SQLSelect("PRAGMA user_version")
 		    
 		    If result <> Nil Then
@@ -28,7 +28,7 @@ Protected Class DBUpdater
 		    mDBConn.Database.SQLExecute(command)
 		    
 		    If mDBConn.Database.Error Then
-		      MsgBox("Databasebase Error:" + mDBConn.Database.ErrorMessage + EndOfLine + EndOfLine + "Command: " + command)
+		      MessageBox("Databasebase Error:" + mDBConn.Database.ErrorMessage + EndOfLine + EndOfLine + "Command: " + command)
 		      Return False
 		    End If
 		  Next
@@ -39,7 +39,7 @@ Protected Class DBUpdater
 
 	#tag Method, Flags = &h1
 		Protected Sub ProcessUpdate(updateSQL As String, dbVersion As Integer)
-		  Dim sql() As String
+		  Var sql() As String
 		  sql = updateSQL.Split(";")
 		  
 		  mDBConn.Database.SQLExecute("BEGIN TRANSACTION")
@@ -114,6 +114,7 @@ Protected Class DBUpdater
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -121,18 +122,23 @@ Protected Class DBUpdater
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
@@ -140,12 +146,15 @@ Protected Class DBUpdater
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="UsePragmaUserVersion"
+			Visible=false
 			Group="Behavior"
 			InitialValue="True"
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

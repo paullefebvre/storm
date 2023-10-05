@@ -11,17 +11,12 @@ Protected Class DBConnection
 
 	#tag Method, Flags = &h0
 		Sub ClearLog()
-		  Redim mSQLLog(-1)
+		  mSQLLog.RemoveAll
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Connect(dbFile As FolderItem, password As String = "") As Boolean
-		  If Not DebugBuild Then
-		    ShowDemoMessage
-		    Return False
-		  End If
-		  
 		  mDatabase = New SQLiteDatabase
 		  mDatabase.DatabaseFile = dbFile
 		  If password <> "" Then
@@ -31,9 +26,9 @@ Protected Class DBConnection
 		  If dbFile = Nil Or Not dbFile.Exists Then
 		    If SingleDatabase Then
 		      // Create database in the system's application data folder
-		      Dim dbFolder As FolderItem = SpecialFolder.ApplicationData.Child(GetAppFolderName)
+		      Var dbFolder As FolderItem = SpecialFolder.ApplicationData.Child(GetAppFolderName)
 		      If Not dbFolder.Exists Then
-		        dbFolder.CreateAsFolder
+		        dbFolder.CreateFolder
 		      End If
 		      
 		      mDatabase.DatabaseFile = dbFolder.Child(dbFile.Name)
@@ -65,13 +60,13 @@ Protected Class DBConnection
 
 	#tag Method, Flags = &h0
 		Function Connect(fileName As String, password As String = "") As Boolean
-		  Dim dbFile As FolderItem
+		  Var dbFile As FolderItem
 		  
 		  If SingleDatabase Then
 		    // Create database in the system's application data folder
-		    Dim dbFolder As FolderItem = SpecialFolder.ApplicationData.Child(GetAppFolderName)
+		    Var dbFolder As FolderItem = SpecialFolder.ApplicationData.Child(GetAppFolderName)
 		    If Not dbFolder.Exists Then
-		      dbFolder.CreateAsFolder
+		      dbFolder.CreateFolder
 		    End If
 		    
 		    dbFile = dbFolder.Child(fileName)
@@ -98,19 +93,19 @@ Protected Class DBConnection
 		Private Function GetAppFolderName() As String
 		  // Remove extension from App name
 		  
-		  Dim appName As String
+		  Var appName As String
 		  
-		  Dim extPos As Integer
+		  Var extPos As Integer
 		  extPos = App.ExecutableFile.Name.InStr(".")
 		  
 		  If extPos > 0 Then
-		    appName = App.ExecutableFile.Name.Left(extPos-1)
+		    appName = App.ExecutableFile.Name.Left(extPos - 1)
 		  Else
 		    appName = App.ExecutableFile.Name
 		  End If
 		  
 		  If appName.Left(5) = "Debug" Then
-		    appname = appName.Right(appName.Len - 5)
+		    appname = appName.Right(appName.Length - 5)
 		  End If
 		  
 		  Return appName
@@ -120,12 +115,11 @@ Protected Class DBConnection
 	#tag Method, Flags = &h21
 		Private Sub LogSQL(sql As String)
 		  If EnableLogging Then
-		    Dim log As New DBSQLLog
-		    Dim now As New Date
-		    log.DateTime = now
+		    Var log As New DBSQLLog
+		    log.DateTime = DateTime.Now
 		    log.SQL = sql
 		    
-		    mSQLLog.Append(log)
+		    mSQLLog.Add(log)
 		  End If
 		End Sub
 	#tag EndMethod
@@ -142,7 +136,7 @@ Protected Class DBConnection
 	#tag Method, Flags = &h0
 		Function SaveLog(logFile As FolderItem) As Boolean
 		  If logFile <> Nil And EnableLogging Then
-		    Dim output As TextOutputStream
+		    Var output As TextOutputStream
 		    
 		    output = TextOutputStream.Create(logFile)
 		    
@@ -305,9 +299,11 @@ Protected Class DBConnection
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="EnableLogging"
+			Visible=false
 			Group="Behavior"
 			InitialValue="0"
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -315,28 +311,37 @@ Protected Class DBConnection
 			Group="ID"
 			InitialValue="2147483648"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="InTransaction"
+			Visible=false
 			Group="Behavior"
 			InitialValue="0"
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="IsConnected"
+			Visible=false
 			Group="Behavior"
 			InitialValue="0"
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="LastErrorCode"
+			Visible=false
 			Group="Behavior"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="LastErrorMessage"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
@@ -346,24 +351,31 @@ Protected Class DBConnection
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="SingleDatabase"
+			Visible=false
 			Group="Behavior"
 			InitialValue="True"
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
@@ -371,6 +383,15 @@ Protected Class DBConnection
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastRowID"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Int64"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

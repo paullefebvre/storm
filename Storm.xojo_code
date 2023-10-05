@@ -1,8 +1,8 @@
 #tag Module
 Protected Module Storm
 	#tag Method, Flags = &h0
-		Function Now() As Date
-		  Return New Date
+		Function Now() As DateTime
+		  Return DateTime.Now
 		  
 		End Function
 	#tag EndMethod
@@ -11,23 +11,6 @@ Protected Module Storm
 		Function Quote(Extends s As String) As String
 		  Return "'" + s.ReplaceAll("'", "''") + "'"
 		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub ShowDemoMessage()
-		  Dim demoMessage As New MessageDialog
-		  demoMessage.Message = "Please purchase Storm to use it in your finished applications."
-		  demoMessage.ActionButton.Caption = "Purchase"
-		  demoMessage.CancelButton.Visible = True
-		  
-		  Dim mb As MessageDialogButton
-		  mb = demoMessage.ShowModal
-		  If mb = demoMessage.ActionButton Then
-		    ShowURL("http://storm.logicalvue.com")
-		  End If
-		  
-		  Return
-		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -78,6 +61,7 @@ Protected Module Storm
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -85,18 +69,23 @@ Protected Module Storm
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
@@ -104,6 +93,7 @@ Protected Module Storm
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module

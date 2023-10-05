@@ -81,12 +81,12 @@ End
 		Private Sub LoadPlayers()
 		  PlayerList.RemoveAllRows
 		  
-		  Dim allPlayers() As Storm.DBObject
+		  Var allPlayers() As Storm.DBObject
 		  
-		  Dim p As New Player
+		  Var p As New Player
 		  allPlayers = p.GetAll
 		  
-		  Dim t As Team
+		  Var t As Team
 		  For Each o As Storm.DBObject In AllPlayers
 		    p = Player(o)
 		    

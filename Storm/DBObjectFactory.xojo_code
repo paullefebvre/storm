@@ -2,7 +2,7 @@
 Protected Class DBObjectFactory
 	#tag Method, Flags = &h0
 		Sub AddClassToMap(dbo As DBObject)
-		  Dim info As Introspection.TypeInfo = Introspection.GetType(dbo)
+		  Var info As Introspection.TypeInfo = Introspection.GetType(dbo)
 		  mClassMap.Value(info.Name) = info
 		End Sub
 	#tag EndMethod
@@ -21,10 +21,10 @@ Protected Class DBObjectFactory
 
 	#tag Method, Flags = &h0
 		Function CreateNewInstance(type as String, ID As Int64, dbConn As DBConnection = Nil) As DBObject
-		  Dim typeFo As Introspection.TypeInfo = mClassMap.Lookup(type, Nil)
+		  Var typeFo As Introspection.TypeInfo = mClassMap.Lookup(type, Nil)
 		  If typeFo <> Nil Then
 		    // Get the constructors for the type
-		    Dim info() As Introspection.ConstructorInfo = typeFo.GetConstructors
+		    Var info() As Introspection.ConstructorInfo = typeFo.GetConstructors
 		    
 		    // If we have no default constructor, then we cannot create
 		    // this class, and that is an error.  So look for a default constructor,
@@ -37,16 +37,16 @@ Protected Class DBObjectFactory
 		      
 		      If UBound(info(i).GetParameters) = 0 And ID = -1 Then
 		        // Instantiate the class
-		        Dim params() As Variant
-		        params.Append(dbConn)
+		        Var params() As Variant
+		        params.Add(dbConn)
 		        Return info(i).Invoke(params)
 		      End If
 		      
 		      If UBound(info(i).GetParameters) = 1 Then
 		        // Instantiate the class
-		        Dim params() As Variant
-		        params.Append(ID)
-		        params.Append(dbConn)
+		        Var params() As Variant
+		        params.Add(ID)
+		        params.Add(dbConn)
 		        Return info(i).Invoke(params)
 		      End If
 		      
@@ -72,6 +72,7 @@ Protected Class DBObjectFactory
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -79,18 +80,23 @@ Protected Class DBObjectFactory
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
@@ -98,6 +104,7 @@ Protected Class DBObjectFactory
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

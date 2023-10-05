@@ -3,7 +3,7 @@ Protected Class App
 Inherits DesktopApplication
 	#tag Event
 		Sub Closing()
-		  Dim logFile As FolderItem = SpecialFolder.Desktop.Child("StormLog.txt")
+		  Var logFile As FolderItem = SpecialFolder.Desktop.Child("StormLog.txt")
 		  
 		  Call Storm.DBConnection.Default.SaveLog(logFile)
 		End Sub
@@ -24,7 +24,7 @@ Inherits DesktopApplication
 
 	#tag MenuHandler
 		Function HelpStormonGithub() As Boolean Handles HelpStormonGithub.Action
-		  ShowURL("")
+		  System.GotoURL("https://github.com/paullefebvre/storm/wiki")
 		  
 		  Return True
 		  
@@ -34,7 +34,7 @@ Inherits DesktopApplication
 
 	#tag Method, Flags = &h21
 		Private Sub AddDBObjectsToFactory()
-		  Dim factory As New Storm.DBObjectFactory
+		  Var factory As New Storm.DBObjectFactory
 		  
 		  factory.AddClassToMap(GetTypeInfo(Team))
 		  factory.AddClassToMap(GetTypeInfo(Player))

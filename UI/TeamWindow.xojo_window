@@ -411,7 +411,7 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub AllPlayers()
-		  Dim playerWin As New AllPlayersWindow
+		  Var playerWin As New AllPlayersWindow
 		  playerWin.Show
 		  
 		End Sub
@@ -435,9 +435,9 @@ End
 		Private Sub LoadTeams(filter As String = "")
 		  TeamList.RemoveAllRows
 		  
-		  Dim allTeams() As Storm.DBObject
+		  Var allTeams() As Storm.DBObject
 		  
-		  Dim t As New Team
+		  Var t As New Team
 		  allTeams = t.GetAll(filter, "Name") // Sort by Name
 		  
 		  For Each o As Storm.DBObject In allTeams
@@ -466,7 +466,7 @@ End
 	#tag Method, Flags = &h21
 		Private Sub Players()
 		  If mCurrentTeam <> Nil Then
-		    Dim playerWin As New PlayerWindow
+		    Var playerWin As New PlayerWindow
 		    playerWin.CurrentTeam = mCurrentTeam
 		    playerWin.Show
 		  End If
@@ -484,42 +484,42 @@ End
 		    
 		    LoadTeams
 		  Else
-		    MsgBox("Error saving")
+		    MessageBox("Error saving")
 		  End If
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Sub Serialize()
-		  Dim allTeams() As Storm.DBObject
+		  Var allTeams() As Storm.DBObject
 		  
-		  Dim t As New Team
+		  Var t As New Team
 		  allTeams = t.GetAll
 		  
-		  Dim xmlDoc As New XmlDocument
-		  Dim root As XmlNode
+		  Var xmlDoc As New XmlDocument
+		  Var root As XmlNode
 		  root = xmlDoc.AppendChild(xmlDoc.CreateElement("baseball.sqlite"))
 		  
-		  Dim teams As XmlNode
+		  Var teams As XmlNode
 		  teams = Storm.DBObject.Serialize(allTeams, root, xmlDoc)
 		  
 		  root.AppendChild(teams)
 		  
-		  Dim allPlayers() As Storm.DBObject
-		  Dim p As New Player
+		  Var allPlayers() As Storm.DBObject
+		  Var p As New Player
 		  allPlayers = p.GetAll
 		  
-		  Dim players As XmlNode
+		  Var players As XmlNode
 		  players = Storm.DBObject.Serialize(allPlayers, root, xmlDoc)
 		  
 		  root.AppendChild(players)
 		  
-		  Dim baseballFile As FolderItem
+		  Var baseballFile As FolderItem
 		  baseballFile = SpecialFolder.Desktop.Child("baseball.xml")
 		  
-		  Dim formattedXML As String = xmlDoc.Format
+		  Var formattedXML As String = xmlDoc.Format
 		  
-		  Dim baseballOutput As TextOutputStream
+		  Var baseballOutput As TextOutputStream
 		  baseballOutput = TextOutputStream.Create(baseballFile)
 		  baseballOutput.WriteLine(formattedXML)
 		  baseballOutput.Close
