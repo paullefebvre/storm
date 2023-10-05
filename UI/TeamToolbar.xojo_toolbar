@@ -1,39 +1,40 @@
-#tag Toolbar
-Begin Toolbar TeamToolbar
-	Begin ToolButton NewTeamButton
+#tag DesktopToolbar
+Begin DesktopToolbar TeamToolbar
+Inherits DesktopToolbar
+	Begin DesktopToolbarButton NewTeamButton
 		Caption = "New Team"
-		HelpTag = ""
-		Style = 0
+		Tooltip = ""
+		ButtonStyle = 0
 		Icon = 268594435
 	End
-	Begin ToolButton PlayersButton
+	Begin DesktopToolbarButton PlayersButton
 		Caption = "Players"
-		HelpTag = ""
-		Style = 0
+		Tooltip = ""
+		ButtonStyle = 0
 		Icon = 1605342412
 	End
-	Begin ToolButton SaveButton
+	Begin DesktopToolbarButton SaveButton
 		Caption = "Save"
-		HelpTag = ""
-		Style = 0
+		Tooltip = ""
+		ButtonStyle = 0
 		Icon = 1400158674
 	End
-	Begin ToolButton ToolItem5
+	Begin DesktopToolbarButton ToolItem5
 		Caption = "Untitled"
-		HelpTag = ""
-		Style = 5
+		Tooltip = ""
+		ButtonStyle = 5
 	End
-	Begin ToolButton AllPlayersButton
+	Begin DesktopToolbarButton AllPlayersButton
 		Caption = "All Players"
-		HelpTag = ""
-		Style = 0
+		Tooltip = ""
+		ButtonStyle = 0
 		Icon = 341046898
 	End
-	Begin ToolButton SerializeButton
+	Begin DesktopToolbarButton SerializeButton
 		Caption = "Serialize to XML"
-		HelpTag = ""
-		Style = 0
+		Tooltip = ""
+		ButtonStyle = 0
 		Icon = 341377649
 	End
 End
-#tag EndToolbar
+#tag EndDesktopToolbar

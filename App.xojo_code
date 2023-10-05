@@ -1,8 +1,8 @@
 #tag Class
 Protected Class App
-Inherits Application
+Inherits DesktopApplication
 	#tag Event
-		Sub Close()
+		Sub Closing()
 		  Dim logFile As FolderItem = SpecialFolder.Desktop.Child("StormLog.txt")
 		  
 		  Call Storm.DBConnection.Default.SaveLog(logFile)
@@ -10,8 +10,8 @@ Inherits Application
 	#tag EndEvent
 
 	#tag Event
-		Sub Open()
-		  App.AutoQuit = True
+		Sub Opening()
+		  App.AllowAutoQuit = True
 		  
 		  If ConnectToDatabase Then
 		    AddDBObjectsToFactory
@@ -24,10 +24,10 @@ Inherits Application
 
 	#tag MenuHandler
 		Function HelpStormonGithub() As Boolean Handles HelpStormonGithub.Action
-			ShowURL("")
-			
-			Return True
-			
+		  ShowURL("")
+		  
+		  Return True
+		  
 		End Function
 	#tag EndMenuHandler
 

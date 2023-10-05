@@ -1,32 +1,30 @@
-#tag Window
-Begin Window TeamWindow
-   BackColor       =   &cFFFFFF00
+#tag DesktopWindow
+Begin DesktopWindow TeamWindow
    Backdrop        =   0
-   CloseButton     =   True
-   Compatibility   =   ""
+   BackgroundColor =   &cFFFFFF00
    Composite       =   False
-   Frame           =   0
+   DefaultLocation =   0
    FullScreen      =   False
-   FullScreenButton=   False
-   HasBackColor    =   False
+   HasBackgroundColor=   False
+   HasCloseButton  =   True
+   HasFullScreenButton=   False
+   HasMaximizeButton=   False
+   HasMinimizeButton=   True
    Height          =   400
    ImplicitInstance=   True
-   LiveResize      =   True
    MacProcID       =   0
-   MaxHeight       =   32000
-   MaximizeButton  =   False
-   MaxWidth        =   32000
+   MaximumHeight   =   32000
+   MaximumWidth    =   32000
    MenuBar         =   616698986
    MenuBarVisible  =   True
-   MinHeight       =   64
-   MinimizeButton  =   True
-   MinWidth        =   64
-   Placement       =   0
+   MinimumHeight   =   64
+   MinimumWidth    =   64
    Resizeable      =   False
    Title           =   "Teams"
+   Type            =   0
    Visible         =   True
    Width           =   600
-   Begin Listbox TeamList
+   Begin DesktopListBox TeamList
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
       Bold            =   False
@@ -34,14 +32,12 @@ Begin Window TeamWindow
       ColumnCount     =   1
       ColumnsResizable=   False
       ColumnWidths    =   ""
-      DataField       =   ""
-      DataSource      =   ""
       DefaultRowHeight=   -1
+      DropIndicatorVisible=   False
       Enabled         =   True
       EnableDrag      =   False
       EnableDragReorder=   False
-      GridLinesHorizontal=   0
-      GridLinesVertical=   0
+      GridLineStyle   =   0
       HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   181
@@ -69,6 +65,7 @@ Begin Window TeamWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   199
+      Transparent     =   True
       Underline       =   False
       UseFocusRing    =   False
       Visible         =   True
@@ -76,11 +73,9 @@ Begin Window TeamWindow
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
-   Begin Label FieldLabel
+   Begin DesktopLabel FieldLabel
       AutoDeactivate  =   True
       Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
       Enabled         =   True
       Height          =   20
       HelpTag         =   ""
@@ -98,8 +93,9 @@ Begin Window TeamWindow
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Name:"
-      TextAlign       =   2
+      TextAlign       =   3
       TextColor       =   &c00000000
       TextFont        =   "System"
       TextSize        =   0.0
@@ -110,11 +106,9 @@ Begin Window TeamWindow
       Visible         =   True
       Width           =   100
    End
-   Begin Label FieldLabel
+   Begin DesktopLabel FieldLabel
       AutoDeactivate  =   True
       Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
       Enabled         =   True
       Height          =   20
       HelpTag         =   ""
@@ -132,8 +126,9 @@ Begin Window TeamWindow
       Selectable      =   False
       TabIndex        =   2
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Coach:"
-      TextAlign       =   2
+      TextAlign       =   3
       TextColor       =   &c00000000
       TextFont        =   "System"
       TextSize        =   0.0
@@ -144,7 +139,7 @@ Begin Window TeamWindow
       Visible         =   True
       Width           =   100
    End
-   Begin TextField NameField
+   Begin DesktopTextField NameField
       AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
@@ -153,8 +148,6 @@ Begin Window TeamWindow
       Bold            =   False
       Border          =   True
       CueText         =   ""
-      DataField       =   ""
-      DataSource      =   ""
       Enabled         =   False
       Format          =   ""
       Height          =   22
@@ -181,12 +174,13 @@ Begin Window TeamWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   154
+      Transparent     =   True
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   264
    End
-   Begin TextField CoachField
+   Begin DesktopTextField CoachField
       AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
@@ -195,8 +189,6 @@ Begin Window TeamWindow
       Bold            =   False
       Border          =   True
       CueText         =   ""
-      DataField       =   ""
-      DataSource      =   ""
       Enabled         =   False
       Format          =   ""
       Height          =   22
@@ -223,19 +215,18 @@ Begin Window TeamWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   186
+      Transparent     =   True
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   264
    End
-   Begin Canvas Canvas1
+   Begin DesktopCanvas Canvas1
       AcceptFocus     =   False
       AcceptTabs      =   False
       AutoDeactivate  =   True
       Backdrop        =   40804817
-      DoubleBuffer    =   False
       Enabled         =   True
-      EraseBackground =   True
       Height          =   128
       HelpTag         =   ""
       Index           =   -2147483648
@@ -256,11 +247,9 @@ Begin Window TeamWindow
       Visible         =   True
       Width           =   128
    End
-   Begin Label Label1
+   Begin DesktopLabel Label1
       AutoDeactivate  =   True
       Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
       Enabled         =   True
       Height          =   32
       HelpTag         =   ""
@@ -278,6 +267,7 @@ Begin Window TeamWindow
       Selectable      =   False
       TabIndex        =   11
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Storm"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -290,11 +280,9 @@ Begin Window TeamWindow
       Visible         =   True
       Width           =   376
    End
-   Begin Label Label2
+   Begin DesktopLabel Label2
       AutoDeactivate  =   True
       Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
       Enabled         =   True
       Height          =   84
       HelpTag         =   ""
@@ -312,6 +300,7 @@ Begin Window TeamWindow
       Selectable      =   False
       TabIndex        =   12
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "An easy-to-use object-relational manager library for Xojo and SQLite."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -326,22 +315,16 @@ Begin Window TeamWindow
    End
    Begin TeamToolbar WindowToolbar
       Enabled         =   True
-      Height          =   70
       Index           =   -2147483648
       InitialParent   =   ""
-      Left            =   9
       LockedInPosition=   False
       Scope           =   0
-      TabPanelIndex   =   "0"
-      Top             =   471
+      TabPanelIndex   =   0
       Visible         =   True
-      Width           =   550
    End
-   Begin Label Label3
+   Begin DesktopLabel Label3
       AutoDeactivate  =   True
       Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
       Enabled         =   True
       Height          =   20
       HelpTag         =   ""
@@ -359,6 +342,7 @@ Begin Window TeamWindow
       Selectable      =   False
       TabIndex        =   13
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Filter:"
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -371,7 +355,7 @@ Begin Window TeamWindow
       Visible         =   True
       Width           =   52
    End
-   Begin TextField FilterField
+   Begin DesktopTextField FilterField
       AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
@@ -380,8 +364,6 @@ Begin Window TeamWindow
       Bold            =   False
       Border          =   True
       CueText         =   ""
-      DataField       =   ""
-      DataSource      =   ""
       Enabled         =   True
       Format          =   ""
       Height          =   22
@@ -408,17 +390,18 @@ Begin Window TeamWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   162
+      Transparent     =   True
       Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   110
    End
 End
-#tag EndWindow
+#tag EndDesktopWindow
 
 #tag WindowCode
 	#tag Event
-		Sub Open()
+		Sub Opening()
 		  LoadTeams
 		  
 		  
@@ -450,7 +433,7 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub LoadTeams(filter As String = "")
-		  TeamList.DeleteAllRows
+		  TeamList.RemoveAllRows
 		  
 		  Dim allTeams() As Storm.DBObject
 		  
@@ -461,10 +444,10 @@ End
 		    t = Team(o)
 		    
 		    TeamList.AddRow(t.Name.StringValue)
-		    TeamList.RowTag(TeamList.LastIndex) = t
+		    TeamList.RowTagAt(TeamList.LastAddedRowIndex) = t
 		  Next
 		  
-		  TeamList.ListIndex = 0
+		  TeamList.SelectedRowIndex = 0
 		End Sub
 	#tag EndMethod
 
@@ -566,9 +549,9 @@ End
 
 #tag Events TeamList
 	#tag Event
-		Sub Change()
-		  If Me.ListIndex >= 0 Then
-		    mCurrentTeam = Team(Me.RowTag(Me.ListIndex))
+		Sub SelectionChanged()
+		  If Me.SelectedRowIndex >= 0 Then
+		    mCurrentTeam = Team(Me.RowTagAt(Me.SelectedRowIndex))
 		    ShowTeam
 		    
 		    EnableFields
@@ -578,7 +561,7 @@ End
 #tag EndEvents
 #tag Events WindowToolbar
 	#tag Event
-		Sub Action(item As ToolItem)
+		Sub Pressed(item As DesktopToolbarItem)
 		  Select Case item.Name
 		  Case "NewTeamButton"
 		    NewTeam
@@ -599,14 +582,14 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Sub Open()
+		Sub Opening()
 		  Me.SaveButton.Enabled = False
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events FilterField
 	#tag Event
-		Function KeyDown(Key As String) As Boolean
+		Function KeyDown(key As String) As Boolean
 		  If Key = Chr(13) Then
 		    LoadTeams("Name LIKE '%" + Me.Text + "%' OR Coach LIKE '%" + Me.Text + "%'")
 		  End If
@@ -615,40 +598,43 @@ End
 #tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
-		Name="BackColor"
+		Name="MinimumWidth"
 		Visible=true
-		Group="Appearance"
-		InitialValue="&hFFFFFF"
-		Type="Color"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Backdrop"
-		Visible=true
-		Group="Appearance"
-		Type="Picture"
-		EditorType="Picture"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="CloseButton"
-		Visible=true
-		Group="Appearance"
-		InitialValue="True"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Composite"
-		Visible=true
-		Group="Appearance"
-		InitialValue="False"
-		Type="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Frame"
-		Visible=true
-		Group="Appearance"
-		InitialValue="0"
+		Group="Size"
+		InitialValue="64"
 		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MinimumHeight"
+		Visible=true
+		Group="Size"
+		InitialValue="64"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaximumWidth"
+		Visible=true
+		Group="Size"
+		InitialValue="32000"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaximumHeight"
+		Visible=true
+		Group="Size"
+		InitialValue="32000"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Type"
+		Visible=true
+		Group="Frame"
+		InitialValue="0"
+		Type="Types"
 		EditorType="Enum"
 		#tag EnumValues
 			"0 - Document"
@@ -661,140 +647,47 @@ End
 			"7 - Global Floating Window"
 			"8 - Sheet Window"
 			"9 - Metal Window"
-			"10 - Drawer Window"
 			"11 - Modeless Dialog"
 		#tag EndEnumValues
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="FullScreen"
+		Name="HasCloseButton"
 		Visible=true
-		Group="Appearance"
-		InitialValue="False"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="FullScreenButton"
-		Visible=true
-		Group="Appearance"
-		InitialValue="False"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="HasBackColor"
-		Visible=true
-		Group="Appearance"
-		InitialValue="False"
-		Type="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Height"
-		Visible=true
-		Group="Position"
-		InitialValue="400"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="ImplicitInstance"
-		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="True"
 		Type="Boolean"
-		EditorType="Boolean"
+		EditorType=""
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="Interfaces"
+		Name="HasMaximizeButton"
 		Visible=true
-		Group="ID"
-		Type="String"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="LiveResize"
-		Visible=true
-		Group="Appearance"
+		Group="Frame"
 		InitialValue="True"
 		Type="Boolean"
-		EditorType="Boolean"
+		EditorType=""
 	#tag EndViewProperty
 	#tag ViewProperty
-		Name="MacProcID"
+		Name="HasMinimizeButton"
 		Visible=true
-		Group="Appearance"
+		Group="Frame"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="HasFullScreenButton"
+		Visible=true
+		Group="Frame"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="DefaultLocation"
+		Visible=true
+		Group="Behavior"
 		InitialValue="0"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MaxHeight"
-		Visible=true
-		Group="Position"
-		InitialValue="32000"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MaximizeButton"
-		Visible=true
-		Group="Appearance"
-		InitialValue="False"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MaxWidth"
-		Visible=true
-		Group="Position"
-		InitialValue="32000"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MenuBar"
-		Visible=true
-		Group="Appearance"
-		Type="MenuBar"
-		EditorType="MenuBar"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MenuBarVisible"
-		Visible=true
-		Group="Appearance"
-		InitialValue="True"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MinHeight"
-		Visible=true
-		Group="Position"
-		InitialValue="64"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MinimizeButton"
-		Visible=true
-		Group="Appearance"
-		InitialValue="True"
-		Type="Boolean"
-		EditorType="Boolean"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="MinWidth"
-		Visible=true
-		Group="Position"
-		InitialValue="64"
-		Type="Integer"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Name"
-		Visible=true
-		Group="ID"
-		Type="String"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="Placement"
-		Visible=true
-		Group="Position"
-		InitialValue="0"
-		Type="Integer"
+		Type="Locations"
 		EditorType="Enum"
 		#tag EnumValues
 			"0 - Default"
@@ -805,18 +698,116 @@ End
 		#tag EndEnumValues
 	#tag EndViewProperty
 	#tag ViewProperty
+		Name="HasBackgroundColor"
+		Visible=true
+		Group="Background"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="BackgroundColor"
+		Visible=true
+		Group="Background"
+		InitialValue="&hFFFFFF"
+		Type="Color"
+		EditorType="Color"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Backdrop"
+		Visible=true
+		Group="Appearance"
+		InitialValue=""
+		Type="Picture"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Composite"
+		Visible=true
+		Group="Appearance"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="FullScreen"
+		Visible=true
+		Group="Appearance"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Height"
+		Visible=true
+		Group="Position"
+		InitialValue="400"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="ImplicitInstance"
+		Visible=true
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Interfaces"
+		Visible=true
+		Group="ID"
+		InitialValue=""
+		Type="String"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MacProcID"
+		Visible=true
+		Group="Appearance"
+		InitialValue="0"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MenuBar"
+		Visible=true
+		Group="Appearance"
+		InitialValue=""
+		Type="MenuBar"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MenuBarVisible"
+		Visible=true
+		Group="Appearance"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Name"
+		Visible=true
+		Group="ID"
+		InitialValue=""
+		Type="String"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
 		Name="Resizeable"
 		Visible=true
 		Group="Appearance"
 		InitialValue="True"
 		Type="Boolean"
-		EditorType="Boolean"
+		EditorType=""
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Super"
 		Visible=true
 		Group="ID"
+		InitialValue=""
 		Type="String"
+		EditorType=""
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Title"
@@ -824,6 +815,7 @@ End
 		Group="Appearance"
 		InitialValue="Untitled"
 		Type="String"
+		EditorType=""
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Visible"
@@ -831,7 +823,7 @@ End
 		Group="Appearance"
 		InitialValue="True"
 		Type="Boolean"
-		EditorType="Boolean"
+		EditorType=""
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Width"
@@ -839,5 +831,6 @@ End
 		Group="Position"
 		InitialValue="600"
 		Type="Integer"
+		EditorType=""
 	#tag EndViewProperty
 #tag EndViewBehavior
