@@ -3,7 +3,7 @@ Protected Class DBConnection
 	#tag Method, Flags = &h0
 		Sub CancelTransaction()
 		  If mInTransaction Then
-		    mDatabase.Rollback
+		    mDatabase.RollbackTransaction
 		    mInTransaction = False
 		  End If
 		End Sub
@@ -34,10 +34,12 @@ Protected Class DBConnection
 		      mDatabase.DatabaseFile = dbFolder.Child(dbFile.Name)
 		    End If
 		    
-		    If mDatabase.CreateDatabaseFile Then
+		    Try
+		      mDatabase.CreateDatabase
 		      mIsConnected = True
-		    End If
-		    
+		    Catch e As DatabaseException
+		      mIsConnected = False
+		    End Try
 		  Else
 		    If mDatabase.Connect Then
 		      mIsConnected = True
@@ -83,7 +85,7 @@ Protected Class DBConnection
 	#tag Method, Flags = &h0
 		Sub EndTransaction()
 		  If mInTransaction Then
-		    mDatabase.Commit
+		    mDatabase.CommitTransaction
 		    mInTransaction = False
 		  End If
 		End Sub
@@ -96,10 +98,10 @@ Protected Class DBConnection
 		  Var appName As String
 		  
 		  Var extPos As Integer
-		  extPos = App.ExecutableFile.Name.InStr(".")
+		  extPos = App.ExecutableFile.Name.IndexOf(".")
 		  
-		  If extPos > 0 Then
-		    appName = App.ExecutableFile.Name.Left(extPos - 1)
+		  If extPos >= 0 Then
+		    appName = App.ExecutableFile.Name.Left(extPos)
 		  Else
 		    appName = App.ExecutableFile.Name
 		  End If
@@ -158,38 +160,41 @@ Protected Class DBConnection
 		Function SQLExecute(sqlCommand As String) As Boolean
 		  LogSQL(sqlCommand)
 		  
-		  mDatabase.SQLExecute(sqlCommand)
-		  
-		  If Not mDatabase.Error Or mDatabase.ErrorCode = 0 Then
-		    If Not mInTransaction Then
-		      mDatabase.Commit
+		  Try
+		    mDatabase.ExecuteSQL(sqlCommand)
+		    
+		    If mInTransaction Then
+		      mDatabase.CommitTransaction
 		    End If
+		    
 		    Return True
-		  Else
-		    Return False // Error
-		  End If
+		    
+		  Catch e As DatabaseException
+		    mLastErrorCode = e.ErrorNumber
+		    mLastErrorMessage = e.Message
+		    Return False
+		  End Try
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function SQLSelect(sqlQuery As String) As RecordSet
+		Function SQLSelect(sqlQuery As String) As RowSet
 		  LogSQL(sqlQuery)
 		  
-		  Return mDatabase.SQLSelect(sqlQuery)
+		  Return mDatabase.SelectSQL(sqlQuery)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function StartTransaction() As Boolean
 		  If Not mInTransaction Then
-		    mDatabase.SQLExecute("BEGIN TRANSACTION")
-		    
-		    If Not mDatabase.Error Then
+		    Try
+		      mDatabase.BeginTransaction
 		      mInTransaction = True
-		    Else
-		      MsgBox("Error starting transaction: " + mDatabase.ErrorMessage)
+		    Catch e As DatabaseException
+		      MessageBox("Error starting transaction: " + e.Message)
 		      Return False
-		    End If
+		    End Try
 		  End If
 		  Return True
 		End Function
@@ -247,7 +252,7 @@ Protected Class DBConnection
 		#tag EndNote
 		#tag Getter
 			Get
-			  Return Database.ErrorCode
+			  Return mLastErrorCode
 			End Get
 		#tag EndGetter
 		LastErrorCode As Integer
@@ -256,7 +261,7 @@ Protected Class DBConnection
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Return mDatabase.ErrorMessage
+			  Return mLastErrorMessage
 			End Get
 		#tag EndGetter
 		LastErrorMessage As String
@@ -281,6 +286,14 @@ Protected Class DBConnection
 
 	#tag Property, Flags = &h21
 		Private mIsConnected As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mLastErrorCode As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mLastErrorMessage As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -327,14 +340,6 @@ Protected Class DBConnection
 			Group="Behavior"
 			InitialValue="0"
 			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LastErrorCode"
-			Visible=false
-			Group="Behavior"
-			InitialValue="0"
-			Type="Integer"
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty

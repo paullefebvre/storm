@@ -24,18 +24,17 @@ Protected Class DBObject
 		    Var query As String
 		    query = "SELECT ID FROM " + childName + " WHERE " + fk + " = " + Self.GetColumn(kPrimaryKey).StringValue
 		    
-		    Var results As RecordSet
+		    Var results As RowSet
 		    results = mDatabaseConnection.SQLSelect(query)
 		    
 		    Var all() As DBObject
 		    Var one As DBObject
 		    
 		    If results <> Nil Then
-		      While Not results.EOF
-		        one = Factory.CreateNewInstance(childName, results.IdxField(1).Int64Value, mDatabaseConnection)
+		      For Each row As DatabaseRow In results
+		        one = Factory.CreateNewInstance(childName, row.ColumnAt(0).Int64Value, mDatabaseConnection)
 		        all.Add(one)
-		        results.MoveNext
-		      Wend
+		      Next
 		    End If
 		    
 		    Return all
@@ -67,13 +66,13 @@ Protected Class DBObject
 		    // Fill dictionary with names of columns on the table so that we won't throw
 		    // exceptions if they are accessed before they have a value
 		    If dbConn <> Nil And dbConn.Database <> Nil Then
-		      Var cols As RecordSet
-		      cols = dbConn.Database.FieldSchema(TableName)
+		      Var cols As RowSet
+		      cols = dbConn.Database.TableColumns(TableName)
 		      
 		      If cols <> Nil Then
-		        While Not cols.EOF
-		          mColumn.Value(cols.IdxField(1).StringValue) = ""
-		          cols.MoveNext
+		        While Not cols.AfterLastRow
+		          mColumn.Value(cols.ColumnAt(0).StringValue) = ""
+		          cols.MoveToNextRow
 		        Wend
 		        cols.Close
 		      Else
@@ -92,19 +91,13 @@ Protected Class DBObject
 		    
 		    Var query As String = "SELECT * FROM " + TableName + " WHERE " + PrimaryKey + " = ?"
 		    
-		    Var sqlStatement As PreparedSQLStatement
-		    sqlStatement = mDatabaseConnection.Prepare(query)
-		    
-		    sqlStatement.BindType(0, SQLitePreparedStatement.SQLITE_INT64)
-		    sqlStatement.Bind(0, ID)
-		    
-		    Var row As RecordSet
-		    row = sqlStatement.SQLSelect()
+		    Var row As RowSet
+		    row = dbConn.Database.SelectSQL(query, ID)
 		    
 		    If row <> Nil Then
-		      If Not row.EOF Then
-		        For i As Integer = 1 To row.FieldCount
-		          mColumn.Value(row.IdxField(i).Name) = row.IdxField(i).Value
+		      If Not row.AfterLastRow Then
+		        For i As Integer = 0 To row.LastColumnIndex
+		          mColumn.Value(row.ColumnAt(i).Name) = row.ColumnAt(i).Value
 		        Next
 		        mIsDirty = False
 		        SetColumn(PrimaryKey) = ID
@@ -113,8 +106,8 @@ Protected Class DBObject
 		        mIsNew = True
 		        
 		        // Populate Dictionary with empty values
-		        For i As Integer = 1 To row.FieldCount
-		          mColumn.Value(row.IdxField(i).Name) = ""
+		        For i As Integer = 0 To row.LastColumnIndex
+		          mColumn.Value(row.ColumnAt(i).Name) = ""
 		        Next
 		        mIsDirty = False
 		        SetColumn(PrimaryKey) = ID
@@ -139,13 +132,13 @@ Protected Class DBObject
 		    
 		    Var query As String = "SELECT * FROM " + TableName + " WHERE " + PrimaryKey + " = " + ID.Quote
 		    
-		    Var row As RecordSet
+		    Var row As RowSet
 		    row = mDatabaseConnection.SQLSelect(query)
 		    
 		    If row <> Nil Then
-		      If Not row.EOF Then
-		        For i As Integer = 1 To row.FieldCount
-		          mColumn.Value(row.IdxField(i).Name) = row.IdxField(i).Value
+		      If Not row.AfterLastRow Then
+		        For i As Integer = 0 To row.LastColumnIndex
+		          mColumn.Value(row.ColumnAt(i).Name) = row.ColumnAt(i).Value
 		        Next
 		        mIsDirty = False
 		        SetColumn(PrimaryKey) = ID
@@ -154,8 +147,8 @@ Protected Class DBObject
 		        mIsNew = True
 		        
 		        // Populate Dictionary with empty values
-		        For i As Integer = 1 To row.FieldCount
-		          mColumn.Value(row.IdxField(i).Name) = ""
+		        For i As Integer = 0 To row.LastColumnIndex
+		          mColumn.Value(row.ColumnAt(i).Name) = ""
 		        Next
 		        mIsDirty = False
 		        SetColumn(PrimaryKey) = ID
@@ -178,16 +171,16 @@ Protected Class DBObject
 		    
 		    Var query As String = "SELECT * FROM " + TableName + " WHERE " + column + " = " + SqlValue(value)
 		    
-		    Var row As RecordSet
+		    Var row As RowSet
 		    row = mDatabaseConnection.SQLSelect(query)
 		    
 		    If row <> Nil Then
-		      If Not row.EOF Then
-		        For i As Integer = 1 To row.FieldCount
-		          mColumn.Value(row.IdxField(i).Name) = row.IdxField(i).Value
+		      If Not row.AfterLastRow Then
+		        For i As Integer = 0 To row.LastColumnIndex
+		          mColumn.Value(row.ColumnAt(i).Name) = row.ColumnAt(i).Value
 		        Next
 		        mIsDirty = False
-		        SetColumn(PrimaryKey) = row.Field(PrimaryKey).Int64Value
+		        SetColumn(PrimaryKey) = row.Column(PrimaryKey).Int64Value
 		      Else
 		        // Since the row was not in the database, then this is a new row
 		        mIsNew = True
@@ -409,17 +402,17 @@ Protected Class DBObject
 		    query = query + " ORDER BY " + sort
 		  End If
 		  
-		  Var results As RecordSet
+		  Var results As RowSet
 		  results = mDatabaseConnection.SQLSelect(query)
 		  
 		  Var all() As DBObject
 		  Var one As DBObject
 		  
 		  If results <> Nil Then
-		    While Not results.EOF
-		      one = Factory.CreateNewInstance(TableName, results.IdxField(1).Int64Value, mDatabaseConnection)
+		    While Not results.AfterLastRow
+		      one = Factory.CreateNewInstance(TableName, results.ColumnAt(0).Int64Value, mDatabaseConnection)
 		      all.Add(one)
-		      results.MoveNext
+		      results.MoveToNextRow
 		    Wend
 		  Else
 		    Raise New InvalidSQLException(query)
@@ -541,7 +534,7 @@ Protected Class DBObject
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub PopulateDictionary(row As RecordSet)
+		Protected Sub PopulateDictionary(row As RowSet)
 		  'Var colRS As RecordSet
 		  'colRS = mDatabaseConnection.Database.FieldSchema(TableName)
 		  '
@@ -555,8 +548,8 @@ Protected Class DBObject
 		  '
 		  'mIsDirty = False
 		  
-		  For i As Integer = 1 To row.FieldCount
-		    mColumn.Value(row.IdxField(i).Name) = ""
+		  For i As Integer = 0 To row.LastColumnIndex
+		    mColumn.Value(row.ColumnAt(i).Name) = ""
 		  Next
 		  mIsDirty = False
 		  
@@ -772,13 +765,13 @@ Protected Class DBObject
 
 	#tag Method, Flags = &h1
 		Protected Sub SetColumnTypes()
-		  Var cols As RecordSet
-		  cols = mDatabaseConnection.Database.FieldSchema(TableName)
+		  Var cols As RowSet
+		  cols = mDatabaseConnection.Database.TableColumns(TableName)
 		  
 		  If cols <> Nil Then
-		    While Not cols.EOF
-		      mColumnType.Value(cols.IdxField(1).StringValue) = cols.IdxField(2).StringValue
-		      cols.MoveNext
+		    While Not cols.AfterLastRow
+		      mColumnType.Value(cols.ColumnAt(0).StringValue) = cols.ColumnAt(1).StringValue
+		      cols.MoveToNextRow
 		    Wend
 		  End If
 		End Sub

@@ -29,20 +29,20 @@ Protected Class DBObjectFactory
 		    // If we have no default constructor, then we cannot create
 		    // this class, and that is an error.  So look for a default constructor,
 		    // and call it if we can
-		    For i As Integer = 0 To UBound(info)
+		    For i As Integer = 0 To info.LastIndex
 		      'If UBound(info(i).GetParameters) = -1 Then
 		      '// Found one!
 		      'Return info(i).Invoke
 		      'End If
 		      
-		      If UBound(info(i).GetParameters) = 0 And ID = -1 Then
+		      If info(i).GetParameters.LastIndex = 0 And ID = -1 Then
 		        // Instantiate the class
 		        Var params() As Variant
 		        params.Add(dbConn)
 		        Return info(i).Invoke(params)
 		      End If
 		      
-		      If UBound(info(i).GetParameters) = 1 Then
+		      If info(i).GetParameters.LastIndex = 1 Then
 		        // Instantiate the class
 		        Var params() As Variant
 		        params.Add(ID)

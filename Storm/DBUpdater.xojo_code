@@ -5,11 +5,11 @@ Protected Class DBUpdater
 		  If UsePragmaUserVersion Then
 		    Var version As Integer
 		    
-		    Var result As RecordSet
-		    result = mDBConn.Database.SQLSelect("PRAGMA user_version")
+		    Var result As RowSet
+		    result = mDBConn.Database.SelectSQL("PRAGMA user_version")
 		    
 		    If result <> Nil Then
-		      version = result.IdxField(1).IntegerValue
+		      version = result.ColumnAt(0).IntegerValue
 		    Else
 		      version = -1
 		    End If
@@ -25,12 +25,13 @@ Protected Class DBUpdater
 		Private Function ProcessSQLCommands(sqlCommands() As String) As Boolean
 		  For Each command As String In sqlCommands
 		    command = command.Trim
-		    mDBConn.Database.SQLExecute(command)
 		    
-		    If mDBConn.Database.Error Then
-		      MessageBox("Databasebase Error:" + mDBConn.Database.ErrorMessage + EndOfLine + EndOfLine + "Command: " + command)
+		    Try
+		      mDBConn.Database.ExecuteSQL(command)
+		    Catch e As DatabaseException
+		      MessageBox("Databasebase Error:" + e.Message + EndOfLine + EndOfLine + "Command: " + command)
 		      Return False
-		    End If
+		    End Try
 		  Next
 		  
 		  Return True
@@ -42,13 +43,13 @@ Protected Class DBUpdater
 		  Var sql() As String
 		  sql = updateSQL.Split(";")
 		  
-		  mDBConn.Database.SQLExecute("BEGIN TRANSACTION")
+		  mDBConn.Database.BeginTransaction
 		  If Not ProcessSQLCommands(sql) Then
-		    mDBConn.Database.Rollback
+		    mDBConn.Database.RollbackTransaction
 		    Return
 		  End If
 		  
-		  mDBConn.Database.Commit
+		  mDBConn.Database.CommitTransaction
 		  
 		  UpdatePragmaDBVersion(dbVersion)
 		  
@@ -76,8 +77,8 @@ Protected Class DBUpdater
 		Private Sub UpdatePragmaDBVersion(version As Integer)
 		  // Update DB version
 		  If UsePragmaUserVersion Then
-		    mDBConn.Database.SQLExecute("PRAGMA user_version = " + Str(version))
-		    mDBConn.Database.Commit
+		    mDBConn.Database.ExecuteSQL("PRAGMA user_version = " + Str(version))
+		    mDBConn.Database.CommitTransaction
 		  Else
 		    UpdateDBVersion(mDBConn, version)
 		  End If
