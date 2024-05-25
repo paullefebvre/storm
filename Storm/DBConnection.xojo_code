@@ -178,10 +178,39 @@ Protected Class DBConnection
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function SQLExecute(sqlCommand as String, values() as Variant) As Boolean
+		  LogSQL(sqlCommand)
+		  
+		  Try
+		    mDatabase.ExecuteSQL(sqlCommand, values)
+		    
+		    If mInTransaction Then
+		      mDatabase.CommitTransaction
+		    End If
+		    
+		    Return True
+		    
+		  Catch e As DatabaseException
+		    mLastErrorCode = e.ErrorNumber
+		    mLastErrorMessage = e.Message
+		    Return False
+		  End Try
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function SQLSelect(sqlQuery As String) As RowSet
 		  LogSQL(sqlQuery)
 		  
 		  Return mDatabase.SelectSQL(sqlQuery)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function SQLSelect(sqlQuery as String, values() as Variant) As RowSet
+		  LogSQL(sqlQuery)
+		  
+		  Return mDatabase.SelectSQL(sqlQuery, values)
 		End Function
 	#tag EndMethod
 
@@ -396,6 +425,14 @@ Protected Class DBConnection
 			Group="Behavior"
 			InitialValue=""
 			Type="Int64"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastErrorCode"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Integer"
 			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior

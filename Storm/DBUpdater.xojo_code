@@ -77,6 +77,7 @@ Protected Class DBUpdater
 		Private Sub UpdatePragmaDBVersion(version As Integer)
 		  // Update DB version
 		  If UsePragmaUserVersion Then
+		    mDBConn.Database.BeginTransaction
 		    mDBConn.Database.ExecuteSQL("PRAGMA user_version = " + Str(version))
 		    mDBConn.Database.CommitTransaction
 		  Else

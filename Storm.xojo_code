@@ -20,6 +20,19 @@ Protected Module Storm
 	#tag EndMethod
 
 
+	#tag Note, Name = Change History
+		
+		== v1.1 ==
+		Initial release by Paul Lefebvre
+		https://github.com/paullefebvre/storm
+		
+		== v1.2 == 2024-05-25
+		Update by Jeremie Leroy
+		- Fixed a possible SQL Injection
+		- Added SerializeJSON Method
+		- Added DBObject.kUseNilValues Constant to initialize columns with Nil values instead of an empty string
+	#tag EndNote
+
 	#tag Note, Name = Storm License
 		Copyright (c) 2014, Paul Lefebvre
 		All rights reserved.
@@ -50,7 +63,7 @@ Protected Module Storm
 	#tag EndNote
 
 
-	#tag Constant, Name = kStormVersion, Type = String, Dynamic = False, Default = \"1.1.0", Scope = Private
+	#tag Constant, Name = kStormVersion, Type = String, Dynamic = False, Default = \"1.2.0", Scope = Private
 	#tag EndConstant
 
 
