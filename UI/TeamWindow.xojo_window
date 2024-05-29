@@ -25,24 +25,29 @@ Begin DesktopWindow TeamWindow
    Visible         =   True
    Width           =   600
    Begin DesktopListBox TeamList
-      AutoDeactivate  =   True
-      AutoHideScrollbars=   True
+      AllowAutoDeactivate=   True
+      AllowAutoHideScrollbars=   True
+      AllowExpandableRows=   False
+      AllowFocusRing  =   True
+      AllowResizableColumns=   False
+      AllowRowDragging=   False
+      AllowRowReordering=   False
       Bold            =   False
-      Border          =   True
       ColumnCount     =   1
-      ColumnsResizable=   False
       ColumnWidths    =   ""
       DefaultRowHeight=   -1
       DropIndicatorVisible=   False
       Enabled         =   True
-      EnableDrag      =   False
-      EnableDragReorder=   False
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
       GridLineStyle   =   0
-      HasHeading      =   True
+      HasBorder       =   True
+      HasHeader       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
       HeadingIndex    =   -1
       Height          =   181
-      HelpTag         =   ""
-      Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
       InitialValue    =   "Team"
@@ -54,31 +59,28 @@ Begin DesktopWindow TeamWindow
       LockRight       =   False
       LockTop         =   True
       RequiresSelection=   True
+      RowSelectionType=   0
       Scope           =   0
-      ScrollbarHorizontal=   False
-      ScrollBarVertical=   True
-      SelectionType   =   0
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
+      Tooltip         =   ""
       Top             =   199
       Transparent     =   True
       Underline       =   False
-      UseFocusRing    =   False
       Visible         =   True
       Width           =   172
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin DesktopLabel FieldLabel
-      AutoDeactivate  =   True
+      AllowAutoDeactivate=   True
       Bold            =   False
       Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
       Height          =   20
-      HelpTag         =   ""
       Index           =   0
       InitialParent   =   ""
       Italic          =   False
@@ -95,11 +97,9 @@ Begin DesktopWindow TeamWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "Name:"
-      TextAlign       =   3
+      TextAlignment   =   0
       TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
+      Tooltip         =   ""
       Top             =   154
       Transparent     =   False
       Underline       =   False
@@ -107,11 +107,13 @@ Begin DesktopWindow TeamWindow
       Width           =   100
    End
    Begin DesktopLabel FieldLabel
-      AutoDeactivate  =   True
+      AllowAutoDeactivate=   True
       Bold            =   False
       Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
       Height          =   20
-      HelpTag         =   ""
       Index           =   1
       InitialParent   =   ""
       Italic          =   False
@@ -128,11 +130,9 @@ Begin DesktopWindow TeamWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "Coach:"
-      TextAlign       =   3
+      TextAlignment   =   0
       TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
+      Tooltip         =   ""
       Top             =   186
       Transparent     =   False
       Underline       =   False
@@ -140,28 +140,29 @@ Begin DesktopWindow TeamWindow
       Width           =   100
    End
    Begin DesktopTextField NameField
-      AcceptTabs      =   False
-      Alignment       =   0
-      AutoDeactivate  =   True
-      AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFFFF00
+      AllowAutoDeactivate=   True
+      AllowFocusRing  =   True
+      AllowSpellChecking=   False
+      AllowTabs       =   False
+      BackgroundColor =   &cFFFFFF
       Bold            =   False
-      Border          =   True
-      CueText         =   ""
       Enabled         =   False
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
       Format          =   ""
+      HasBorder       =   True
       Height          =   22
-      HelpTag         =   ""
+      Hint            =   ""
       Index           =   -2147483648
       Italic          =   False
       Left            =   316
-      LimitText       =   0
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Mask            =   ""
+      MaximumCharactersAllowed=   0
       Password        =   False
       ReadOnly        =   False
       Scope           =   0
@@ -169,40 +170,40 @@ Begin DesktopWindow TeamWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
+      TextAlignment   =   0
       TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
+      Tooltip         =   ""
       Top             =   154
       Transparent     =   True
       Underline       =   False
-      UseFocusRing    =   True
+      ValidationMask  =   ""
       Visible         =   True
       Width           =   264
    End
    Begin DesktopTextField CoachField
-      AcceptTabs      =   False
-      Alignment       =   0
-      AutoDeactivate  =   True
-      AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFFFF00
+      AllowAutoDeactivate=   True
+      AllowFocusRing  =   True
+      AllowSpellChecking=   False
+      AllowTabs       =   False
+      BackgroundColor =   &cFFFFFF
       Bold            =   False
-      Border          =   True
-      CueText         =   ""
       Enabled         =   False
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
       Format          =   ""
+      HasBorder       =   True
       Height          =   22
-      HelpTag         =   ""
+      Hint            =   ""
       Index           =   -2147483648
       Italic          =   False
       Left            =   316
-      LimitText       =   0
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Mask            =   ""
+      MaximumCharactersAllowed=   0
       Password        =   False
       ReadOnly        =   False
       Scope           =   0
@@ -210,25 +211,24 @@ Begin DesktopWindow TeamWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
+      TextAlignment   =   0
       TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
+      Tooltip         =   ""
       Top             =   186
       Transparent     =   True
       Underline       =   False
-      UseFocusRing    =   True
+      ValidationMask  =   ""
       Visible         =   True
       Width           =   264
    End
    Begin DesktopCanvas Canvas1
-      AcceptFocus     =   False
-      AcceptTabs      =   False
-      AutoDeactivate  =   True
+      AllowAutoDeactivate=   True
+      AllowFocus      =   False
+      AllowFocusRing  =   True
+      AllowTabs       =   False
       Backdrop        =   40804817
       Enabled         =   True
       Height          =   128
-      HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   20
@@ -241,18 +241,20 @@ Begin DesktopWindow TeamWindow
       TabIndex        =   10
       TabPanelIndex   =   0
       TabStop         =   True
+      Tooltip         =   ""
       Top             =   14
       Transparent     =   True
-      UseFocusRing    =   True
       Visible         =   True
       Width           =   128
    End
    Begin DesktopLabel Label1
-      AutoDeactivate  =   True
+      AllowAutoDeactivate=   True
       Bold            =   False
       Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
       Height          =   32
-      HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
@@ -269,11 +271,9 @@ Begin DesktopWindow TeamWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "Storm"
-      TextAlign       =   0
+      TextAlignment   =   0
       TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   24.0
-      TextUnit        =   0
+      Tooltip         =   ""
       Top             =   14
       Transparent     =   False
       Underline       =   False
@@ -281,11 +281,13 @@ Begin DesktopWindow TeamWindow
       Width           =   376
    End
    Begin DesktopLabel Label2
-      AutoDeactivate  =   True
+      AllowAutoDeactivate=   True
       Bold            =   False
       Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
       Height          =   84
-      HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
@@ -302,11 +304,9 @@ Begin DesktopWindow TeamWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "An easy-to-use object-relational manager library for Xojo and SQLite."
-      TextAlign       =   0
+      TextAlignment   =   0
       TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
+      Tooltip         =   ""
       Top             =   58
       Transparent     =   False
       Underline       =   False
@@ -323,11 +323,13 @@ Begin DesktopWindow TeamWindow
       Visible         =   True
    End
    Begin DesktopLabel Label3
-      AutoDeactivate  =   True
+      AllowAutoDeactivate=   True
       Bold            =   False
       Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
       Height          =   20
-      HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
@@ -344,11 +346,9 @@ Begin DesktopWindow TeamWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "Filter:"
-      TextAlign       =   0
+      TextAlignment   =   0
       TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
+      Tooltip         =   ""
       Top             =   163
       Transparent     =   False
       Underline       =   False
@@ -356,28 +356,29 @@ Begin DesktopWindow TeamWindow
       Width           =   52
    End
    Begin DesktopTextField FilterField
-      AcceptTabs      =   False
-      Alignment       =   0
-      AutoDeactivate  =   True
-      AutomaticallyCheckSpelling=   False
-      BackColor       =   &cFFFFFF00
+      AllowAutoDeactivate=   True
+      AllowFocusRing  =   True
+      AllowSpellChecking=   False
+      AllowTabs       =   False
+      BackgroundColor =   &cFFFFFF
       Bold            =   False
-      Border          =   True
-      CueText         =   ""
       Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
       Format          =   ""
+      HasBorder       =   True
       Height          =   22
-      HelpTag         =   ""
+      Hint            =   ""
       Index           =   -2147483648
       Italic          =   False
       Left            =   82
-      LimitText       =   0
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Mask            =   ""
+      MaximumCharactersAllowed=   0
       Password        =   False
       ReadOnly        =   False
       Scope           =   0
@@ -385,14 +386,13 @@ Begin DesktopWindow TeamWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
+      TextAlignment   =   0
       TextColor       =   &c00000000
-      TextFont        =   "System"
-      TextSize        =   0.0
-      TextUnit        =   0
+      Tooltip         =   ""
       Top             =   162
       Transparent     =   True
       Underline       =   False
-      UseFocusRing    =   True
+      ValidationMask  =   ""
       Visible         =   True
       Width           =   110
    End
@@ -525,7 +525,47 @@ End
 		  baseballOutput.Close
 		  
 		  
+		  MessageBox("baseball.xml saved on Desktop")
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub SerializeJSON()
+		  Var allTeams() As Storm.DBObject
 		  
+		  Var t As New Team
+		  allTeams = t.GetAll
+		  
+		  Var js As new JSONItem
+		  
+		  Var teams as JSONItem = Storm.DBObject.SerializeJSON(allTeams)
+		  
+		  js.Value("Teams") = teams
+		  
+		  
+		  Var allPlayers() As Storm.DBObject
+		  Var p As New Player
+		  allPlayers = p.GetAll
+		  
+		  Var players As JSONItem
+		  players = Storm.DBObject.SerializeJSON(allPlayers)
+		  
+		  js.value("Players") = Players
+		  
+		  Var baseballFile As FolderItem
+		  baseballFile = SpecialFolder.Desktop.Child("baseball.js")
+		  
+		  js.Compact = False
+		  
+		  
+		  
+		  Var baseballOutput As TextOutputStream
+		  baseballOutput = TextOutputStream.Create(baseballFile)
+		  baseballOutput.WriteLine(js.ToString)
+		  baseballOutput.Close
+		  
+		  
+		  MessageBox("baseball.js saved on Desktop")
 		End Sub
 	#tag EndMethod
 
@@ -577,6 +617,9 @@ End
 		    
 		  Case "SerializeButton"
 		    Serialize
+		    
+		  Case "SerializeJSONButton"
+		    SerializeJSON
 		    
 		  End Select
 		End Sub
@@ -646,8 +689,7 @@ End
 			"6 - Rounded Window"
 			"7 - Global Floating Window"
 			"8 - Sheet Window"
-			"9 - Metal Window"
-			"11 - Modeless Dialog"
+			"9 - Modeless Dialog"
 		#tag EndEnumValues
 	#tag EndViewProperty
 	#tag ViewProperty
@@ -710,8 +752,8 @@ End
 		Visible=true
 		Group="Background"
 		InitialValue="&hFFFFFF"
-		Type="Color"
-		EditorType="Color"
+		Type="ColorGroup"
+		EditorType="ColorGroup"
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="Backdrop"
@@ -774,7 +816,7 @@ End
 		Visible=true
 		Group="Appearance"
 		InitialValue=""
-		Type="MenuBar"
+		Type="DesktopMenuBar"
 		EditorType=""
 	#tag EndViewProperty
 	#tag ViewProperty

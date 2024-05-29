@@ -36,5 +36,11 @@ Inherits DesktopToolbar
 		ButtonStyle = 0
 		Icon = 341377649
 	End
+	Begin DesktopToolbarButton SerializeJSONButton
+		Caption = "Serialize to JSON"
+		Tooltip = ""
+		ButtonStyle = 0
+		Icon = 341377649
+	End
 End
 #tag EndDesktopToolbar

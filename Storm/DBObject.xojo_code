@@ -71,7 +71,11 @@ Protected Class DBObject
 		      
 		      If cols <> Nil Then
 		        While Not cols.AfterLastRow
-		          mColumn.Value(cols.ColumnAt(0).StringValue) = ""
+		          #if kUseNilValues
+		            mColumn.Value(cols.ColumnAt(0).StringValue) = Nil
+		          #else
+		            mColumn.Value(cols.ColumnAt(0).StringValue) = ""
+		          #endif
 		          cols.MoveToNextRow
 		        Wend
 		        cols.Close
@@ -169,10 +173,13 @@ Protected Class DBObject
 		Sub Constructor(column As String, value As Variant, dbConn As DBConnection = Nil)
 		  If Initialize(dbConn) Then
 		    
-		    Var query As String = "SELECT * FROM " + TableName + " WHERE " + column + " = " + SqlValue(value)
+		    Var query As String = "SELECT * FROM " + TableName + " WHERE " + column + " = ?" '+ SqlValue(value)
+		    
+		    Var values() as Variant
+		    values.Add value
 		    
 		    Var row As RowSet
-		    row = mDatabaseConnection.SQLSelect(query)
+		    row = mDatabaseConnection.SQLSelect(query, values)
 		    
 		    If row <> Nil Then
 		      If Not row.AfterLastRow Then
@@ -348,6 +355,125 @@ Protected Class DBObject
 		                dbValue = colValue
 		              Else
 		                dbValue = DecodeURLComponent(colValue)
+		              End Select
+		            End Select
+		          End If
+		        End Select
+		        
+		        If mColumnType.Lookup(colName, "") <> "" Then
+		          dbo.SetColumn(colName) = dbValue
+		        End If
+		        
+		      Next
+		      
+		      Call dbo.Save
+		      pkValue = dbo.GetColumn(PrimaryKey)
+		      
+		    End If
+		    
+		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub DeserializeJSON(js As JSONItem, usePrimaryKey As Boolean = True)
+		  // Parse the supplied JSONItem and populate this instance
+		  // with its values
+		  // Accepts both a single JSONItem {...}
+		  // or an Array of JSONItems [{...},{...}]
+		  
+		  If js = Nil Then Return
+		  
+		  Var LastRowIndex As Integer
+		  if js.IsArray then
+		    LastRowIndex = js.LastRowIndex
+		  end if
+		  
+		  Var timestamp As String
+		  Var dbTimestamp As String
+		  Var primaryKeyValue As Int64
+		  Var serverIDValue As String
+		  
+		  Var tsNode As XmlNode
+		  For i As Integer = 0 To LastRowIndex
+		    
+		    Dim child As JSONItem
+		    if js.IsArray then
+		      child = js.ChildAt(i)
+		    Else
+		      child = js
+		    end if
+		    
+		    timestamp = ""
+		    
+		    // Find the timestamp column
+		    for each key as String in child.Keys
+		      
+		      if key = "timestamp" then
+		        if child.Value(key) <> nil then
+		          timestamp = child.Value(key)
+		        else
+		          timestamp = ""
+		        end if
+		        
+		      elseif key = PrimaryKey then
+		        primaryKeyValue = child.Value(key).IntegerValue
+		        
+		      Elseif key = "serverID" then
+		        serverIDValue = child.Value(key).StringValue
+		        
+		      end if
+		    Next
+		    
+		    // Need to get instance for the actual type
+		    Var dbo As DBObject
+		    dbo = Factory.CreateNewInstance(TableName, primaryKeyValue, mDatabaseConnection)
+		    
+		    // If JSON timestamp is after the DB timestamp we have for this row (or this is a new row) then
+		    // apply the JSON values to the DB
+		    If dbo.IsNew Then
+		      dbTimestamp = ""
+		    Else
+		      dbTimestamp = dbo.GetColumn("timestamp")
+		    End If
+		    If timestamp > dbTimestamp Then
+		      // Process each column in JSON and set its value in the class
+		      
+		      Var dbValue As String
+		      Var colValue As String
+		      Var colName As String
+		      Var pkValue As String
+		      
+		      for each colName in child.Keys
+		        
+		        if child.Value(colName).IsNull then
+		          colValue = ""
+		        Else
+		          colValue = child.Value(colName)
+		        end if
+		        
+		        
+		        Select Case colName
+		        Case PrimaryKey
+		          'pkValue = colValue
+		          Continue
+		        Else
+		          If mColumnType.Lookup(colName, "") <> "" Then
+		            Select Case mColumnType.Value(colName)
+		            Case 10 // Timestamp
+		              dbValue = colValue
+		            Case Variant.TypeBoolean // Boolean
+		              If colValue = "True" Then
+		                dbValue = "1"
+		              Else
+		                dbValue = "0"
+		              End If
+		            Case Else
+		              Select Case colName
+		              Case "date"
+		                dbValue = colValue
+		              Else
+		                dbValue = colValue
 		              End Select
 		            End Select
 		          End If
@@ -565,6 +691,8 @@ Protected Class DBObject
 		  Var command As String
 		  Var comma As String
 		  
+		  Var Values() as Variant
+		  
 		  If mIsNew Then
 		    // Insert data
 		    command = "INSERT INTO " + TableName + " ("
@@ -582,9 +710,14 @@ Protected Class DBObject
 		    For Each colName As Variant In mColumn.Keys
 		      If colName <> PrimaryKey Or mPrimaryKeyIsString Or UsePrimaryKeyValue Then
 		        If colName = TimeStamp Then
-		          command = command + comma + Now.SQLDateTime.Quote
+		          Values.Add now.SQLDateTime
+		          command = command + comma + "?"
+		          'command = command + comma + Now.SQLDateTime.Quote
 		        Else
-		          command = command + comma + sqlValue(mColumn.Value(colName))
+		          Values.Add mColumn.Value(colName)
+		          command = command + comma + "?"
+		          
+		          'command = command + comma + sqlValue(mColumn.Value(colName))
 		        End If
 		        
 		        comma = ","
@@ -599,9 +732,12 @@ Protected Class DBObject
 		    For Each colName As Variant In mColumn.Keys
 		      If colName <> PrimaryKey And colName <> "serverID" Then
 		        If colName = TimeStamp Then
-		          command = command + comma + colName + " = " + Now.SQLDateTime.Quote
+		          values.Add now.SQLDateTime
+		          command = command + comma + colName + " = ?"
+		          'command = command + comma + colName + " = " + Now.SQLDateTime.Quote
 		        Else
-		          command = command + comma + colName + " = " + sqlValue(mColumn.Value(colName))
+		          values.Add mColumn.Value(colName)
+		          command = command + comma + colName + " = ?"
 		        End If
 		        
 		        comma = ","
@@ -612,8 +748,9 @@ Protected Class DBObject
 		    
 		  End If
 		  
-		  command = command.ReplaceAll("0.0e+", "0") // Windows hack, apparently it's converting 0 to be 0.0e+ which is messing up the SQL
-		  If mDatabaseConnection.SQLExecute(command) Then
+		  
+		  
+		  If mDatabaseConnection.SQLExecute(command, values) Then
 		    mIsDirty = False
 		    
 		    If mIsNew Then
@@ -749,6 +886,87 @@ Protected Class DBObject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function SerializeJSON() As JSONItem
+		  // Convert the data in this instance to an JSON item
+		  // Note that the table name needs to be converted to singular
+		  
+		  // {
+		  //    "primaryKey": value
+		  //    "col1": value
+		  //    "colX": value
+		  // }
+		  
+		  Var row As new JSONItem
+		  
+		  
+		  Try
+		    
+		    
+		    // Add Primary Key as first column
+		    'row.Value(PrimaryKey) = self.GetColumn(PrimaryKey)
+		    
+		    
+		    For Each c As String In Self.ColumnNames
+		      If c <> Self.PrimaryKey Then
+		        
+		        Dim value As Variant
+		        
+		        
+		        
+		        Select Case mColumnType.Value(c)
+		        Case 10 // Timestamp
+		          value = Self.GetColumn(c)
+		        Case Variant.TypeBoolean // Boolean
+		          If Self.GetColumn(c).BooleanValue Then
+		            value = "True"
+		          Else
+		            value = "False"
+		          End If
+		        Case Else
+		          value = Self.GetColumn(c)
+		        End Select
+		        
+		        // Convert data values to ISO861 format
+		        Select Case c
+		        Case "timestamp", "date", "dateFrom", "dateTo", "expirationDate"
+		          value = Self.GetColumn(c)
+		        End Select
+		        
+		        row.Value(c) = value
+		      End If
+		    Next
+		    
+		  Catch e As XmlException
+		    MessageBox(e.Message)
+		  End Try
+		  
+		  Return row
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Shared Function SerializeJSON(objects() As DBObject) As JSONItem
+		  // Serialize a set of data by calling
+		  // Serialize for each object and then combine all the nodes into one large node
+		  
+		  Var js As new JSONItem
+		  
+		  Var children() as JSONItem
+		  
+		  Try
+		    For Each o As Storm.DBObject In objects
+		      js.Add o.SerializeJSON()
+		    Next
+		  Catch e As RuntimeException
+		    MessageBox(e.Message)
+		  End Try
+		  
+		  
+		  Return js
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub SetColumn(columnName As String, Assigns value As Variant)
 		  // Look up the column in the dictionary and return the value
 		  
@@ -805,15 +1023,18 @@ Protected Class DBObject
 		  Var sqlString As String
 		  
 		  Select Case VarType(value)
-		  Case 0
+		  Case Variant.TypeNil
 		    sqlString = "''"
 		  Case 2, 3, 4 // Integer
 		    sqlString = Format(value.DoubleValue, "#")
-		  Case 5, 6 // Double
+		    
+		  Case Variant.TypeDouble, Variant.TypeCurrency //Double
 		    sqlString = Str(value.CurrencyValue)
-		  Case 8 // String
+		    
+		  Case Variant.TypeString //String
 		    sqlString = value.StringValue.ReplaceAll("'", "''").Quote
-		  Case 11 // Boolean
+		    
+		  Case Variant.TypeBoolean // Boolean
 		    'sqlString = "'" + value + "'"
 		    If value.BooleanValue Then
 		      sqlString = "1"
@@ -821,6 +1042,8 @@ Protected Class DBObject
 		      sqlString = "0"
 		    End If
 		  End Select
+		  
+		  sqlString = sqlString.ReplaceAll("0.0e+", "0") // Windows hack, apparently it's converting 0 to be 0.0e+ which is messing up the SQL
 		  
 		  Return sqlString
 		End Function
@@ -982,6 +1205,9 @@ Protected Class DBObject
 
 
 	#tag Constant, Name = kPrimaryKey, Type = String, Dynamic = False, Default = \"ID", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kUseNilValues, Type = Boolean, Dynamic = False, Default = \"False", Scope = Protected, Description = 496620547275652C20656163682044424F626A6563742077696C6C20626520696E697469616C697A65642077697468204E696C2076616C75657320666F72206561636820636F6C756D6E2E0A49662046616C73652C206561636820636F6C756D6E20697320696E697469616C697A6564207769746820616E20656D70747920737472696E672E
 	#tag EndConstant
 
 
