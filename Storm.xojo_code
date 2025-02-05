@@ -31,10 +31,13 @@ Protected Module Storm
 		- Fixed a possible SQL Injection
 		- Added SerializeJSON Method
 		- Added DBObject.kUseNilValues Constant to initialize columns with Nil values instead of an empty string
+		
+		== v1.2.1 == 2025-02-05
+		- Minor code cleanup.
 	#tag EndNote
 
 	#tag Note, Name = Storm License
-		Copyright (c) 2014, Paul Lefebvre
+		Copyright (c) 2014-2025, Paul Lefebvre
 		All rights reserved.
 		
 		Redistribution and use in source and binary forms, with or without
@@ -63,7 +66,7 @@ Protected Module Storm
 	#tag EndNote
 
 
-	#tag Constant, Name = kStormVersion, Type = String, Dynamic = False, Default = \"1.2.0", Scope = Private
+	#tag Constant, Name = kStormVersion, Type = String, Dynamic = False, Default = \"1.2.1", Scope = Private
 	#tag EndConstant
 
 

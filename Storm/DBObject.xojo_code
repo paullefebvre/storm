@@ -176,7 +176,7 @@ Protected Class DBObject
 		    Var query As String = "SELECT * FROM " + TableName + " WHERE " + column + " = ?" '+ SqlValue(value)
 		    
 		    Var values() as Variant
-		    values.Add value
+		    values.Add(value)
 		    
 		    Var row As RowSet
 		    row = mDatabaseConnection.SQLSelect(query, values)
@@ -394,7 +394,6 @@ Protected Class DBObject
 		  Var primaryKeyValue As Int64
 		  Var serverIDValue As String
 		  
-		  Var tsNode As XmlNode
 		  For i As Integer = 0 To LastRowIndex
 		    
 		    Dim child As JSONItem
@@ -710,14 +709,11 @@ Protected Class DBObject
 		    For Each colName As Variant In mColumn.Keys
 		      If colName <> PrimaryKey Or mPrimaryKeyIsString Or UsePrimaryKeyValue Then
 		        If colName = TimeStamp Then
-		          Values.Add now.SQLDateTime
+		          Values.Add(now.SQLDateTime)
 		          command = command + comma + "?"
-		          'command = command + comma + Now.SQLDateTime.Quote
 		        Else
-		          Values.Add mColumn.Value(colName)
+		          Values.Add(mColumn.Value(colName))
 		          command = command + comma + "?"
-		          
-		          'command = command + comma + sqlValue(mColumn.Value(colName))
 		        End If
 		        
 		        comma = ","
@@ -732,11 +728,10 @@ Protected Class DBObject
 		    For Each colName As Variant In mColumn.Keys
 		      If colName <> PrimaryKey And colName <> "serverID" Then
 		        If colName = TimeStamp Then
-		          values.Add now.SQLDateTime
+		          values.Add(now.SQLDateTime)
 		          command = command + comma + colName + " = ?"
-		          'command = command + comma + colName + " = " + Now.SQLDateTime.Quote
 		        Else
-		          values.Add mColumn.Value(colName)
+		          values.Add(mColumn.Value(colName))
 		          command = command + comma + colName + " = ?"
 		        End If
 		        
@@ -747,8 +742,6 @@ Protected Class DBObject
 		    command = command + " WHERE " + PrimaryKey + " = " + SqlValue(GetColumn(PrimaryKey).StringValue)
 		    
 		  End If
-		  
-		  
 		  
 		  If mDatabaseConnection.SQLExecute(command, values) Then
 		    mIsDirty = False
@@ -951,16 +944,13 @@ Protected Class DBObject
 		  
 		  Var js As new JSONItem
 		  
-		  Var children() as JSONItem
-		  
 		  Try
 		    For Each o As Storm.DBObject In objects
-		      js.Add o.SerializeJSON()
+		      js.Add(o.SerializeJSON())
 		    Next
 		  Catch e As RuntimeException
 		    MessageBox(e.Message)
 		  End Try
-		  
 		  
 		  Return js
 		End Function

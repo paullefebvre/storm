@@ -41,11 +41,12 @@ Protected Class DBConnection
 		      mIsConnected = False
 		    End Try
 		  Else
-		    If mDatabase.Connect Then
+		    Try
+		      mDatabase.Connect
 		      mIsConnected = True
-		    Else
+		    Catch e As DatabaseException
 		      mIsConnected = False
-		    End If
+		    End Try
 		  End If
 		  
 		  If mIsConnected Then
